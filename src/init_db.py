@@ -1,16 +1,23 @@
 import mysql.connector
-import os
+import yaml
 
 
 # Script to initialize the database, run once to create the database and tables
 def initDB():
-    password = os.getenv("PASSWORD")
+    try:
+        with open('config.yml') as f:
+            config = yaml.safe_load(f)
+    except yaml.YAMLError:
+        print('YAML read error')
+        print('Encryption service stopped')
+        exit(1)
 
-    # Connect to MySQL server
+    # Connect to the MySQL server and select the "olympics" database
     cnx = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password=password
+        host=config['host'],
+        user=config['user'],
+        password=config['password'],
+        database=config['database']
     )
 
     # Create the "olympics" database
