@@ -3,7 +3,7 @@ import pandas as pd
 
 # script to clean irregular data in csv files, convert to title case
 def main():
-    files = ["summer.csv", "winter.csv"]
+    files = ["../data/summer.csv", "../data/winter.csv"]
 
     for file in files:
         df = pd.read_csv(file)

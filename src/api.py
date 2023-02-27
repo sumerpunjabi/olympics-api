@@ -1,14 +1,24 @@
 from fastapi import FastAPI
 import mysql.connector
+import yaml
+
 
 app = FastAPI()
 
+try:
+    with open('config.yml') as f:
+        config = yaml.safe_load(f)
+except yaml.YAMLError:
+    print('YAML read error')
+    print('Encryption service stopped')
+    exit(1)
+
 # Connect to the MySQL server and select the "olympics" database
 cnx = mysql.connector.connect(
-    host="localhost",
-    user="root",
-    password="AdidasNike1!",
-    database="olympics"
+    host=config['host'],
+    user=config['user'],
+    password=config['password'],
+    database=config['database']
 )
 
 
@@ -120,10 +130,3 @@ def to_dict(lst):
     dic = {'ID': lst[0], 'Name': lst[1], 'Sex': lst[2], 'Age': lst[3], 'Team': lst[4], 'NOC': lst[5], 'Games': lst[6],
            'Season': lst[7], 'City': lst[8], 'Sport': lst[9], 'Event': lst[10], 'Medal': lst[11]}
     return dic
-
-
-# Run the FastAPI application using the uvicorn server
-if __name__ == "__main__":
-    import uvicorn
-
-    uvicorn.run(app, host="localhost", port=8000)
